@@ -1,0 +1,58 @@
+!!! 5
+//if lt IE 7 ]><html class="ie ie6" lang="en">
+//if IE 7 ]><html class="ie ie7" lang="en">
+//if IE 8 ]><html class="ie ie8" lang="en">
+// [if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]
+head
+  meta(charset='utf-8')
+  title Secare
+  meta(name='description', content='')
+  meta(name='author', content='')
+  // Mobile Specific
+  meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+  // CSS
+  != css('app')
+  != css('bootswatch-spacelab.min')
+
+body(data-spy="scroll", data-target="#navbar", data-offset="0")
+
+  #navbar.navbar.navbar-fixed-top
+    .navbar-inner
+      .container
+        a.brand(href='/') Secare
+        //- ul.nav
+          //- li: a(href='#home') Home
+        ul.nav.pull-right
+          li.divider-vertical
+          li.sign_out
+            a#sign_out(href='#') Sign out
+          li.dropdown
+            a.dropdown-toggle#sign_in(href='#', data-toggle='dropdown')
+              | Sign In
+              strong.caret
+            .dropdown-menu(style='padding: 15px; padding-bottom: 0px;')
+              form#authenticate(method='post', action='login', accept-charset='UTF-8')
+                input#username(style='margin-bottom: 15px;', type='text', placeholder='Username', name='username')
+                input#password(style='margin-bottom: 15px;', type='password', placeholder='Password', name='password')
+                input#remember-me(style='float: left; margin-right: 10px;', type='checkbox', name='remember-me', value='1')
+                label.string.optional(for='remember-me') Remember me
+                input#sign-in.btn.btn-primary.btn-block(type='submit', value='Sign In')
+
+                //- label(style='text-align: center; margin-top: 5px;') or
+                //- input#sign-in-google.btn.btn-primary.btn-block(type='button', value='Sign In with Google')
+                //- input#sign-in-twitter.btn.btn-primary.btn-block(type='button', value='Sign In with Twitter')
+
+
+  .container
+    block content
+
+  != js('//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js')
+  != js('//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js')
+  != js('//cdnjs.cloudflare.com/ajax/libs/sugar/1.3.9/sugar.min.js')
+  != js('//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/0.0.11/js/bootstrap-datetimepicker.min.js')
+
+  != js('//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js')
+  != js('app')
+
+| </html>

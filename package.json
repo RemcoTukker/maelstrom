@@ -7,11 +7,23 @@
     "express": "3.x",
     "coffee-script": "1.6.x",
     "connect-assets": "2.5.x",
-    "hamljs": "0.6.x",
-    "stylus": "0.36.x"
+    "jade": "0.35.x",
+    "stylus": "0.36.x",
+    "nib": "0.9.x",
+    "which": "1.0.5",
+    "wrench": "1.4.4"
   }, "scripts": {
     "start": "node server.js"
   }, "devDependencies": {
     "coffee-script": "1.6.x"
+    , "mocha": "*"
+    , "should": "*"
+    , "supertest": "*"
+    , "request": "*"
+    , "supervisor": "*"
+    , "docco-husky": "*"
+    , "puts": "*"
+    , "node-inspector": "*"
+    , "ejs": "*"
   }
 }
