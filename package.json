@@ -1,0 +1,18 @@
+{
+  "name": "haven",
+  "description": "Rotterdam opendata havendagen app",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.x",
+    "coffee-script": "1.6.x",
+    "connect-assets": "2.5.x",
+    "hamljs": "0.6.x",
+    "stylus": "0.36.x"
+  }, "scripts": {
+    "install": "node node_modules/coffee-script/bin/cake build",
+    "start": "node server.js"
+  }, "devDependencies": {
+    "coffee-script", "1.6.x"
+  }
+}
