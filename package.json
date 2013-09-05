@@ -10,9 +10,8 @@
     "hamljs": "0.6.x",
     "stylus": "0.36.x"
   }, "scripts": {
-    "install": "node node_modules/coffee-script/bin/cake build",
     "start": "node server.js"
   }, "devDependencies": {
-    "coffee-script", "1.6.x"
+    "coffee-script": "1.6.x"
   }
 }
