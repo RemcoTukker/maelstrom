@@ -11,7 +11,9 @@
     "stylus": "0.36.x",
     "nib": "0.9.x",
     "which": "1.0.5",
-    "wrench": "1.4.4"
+    "wrench": "1.4.4",
+    "pg": "2.5.x",
+    "orm": "2.1.x"
   }, "scripts": {
     "install": "node node_modules/coffee-script/bin/cake build",
     "start": "node server.js"
