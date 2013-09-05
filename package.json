@@ -13,6 +13,7 @@
     "which": "1.0.5",
     "wrench": "1.4.4"
   }, "scripts": {
+    "install": "node node_modules/coffee-script/bin/cake build",
     "start": "node server.js"
   }, "devDependencies": {
     "coffee-script": "1.6.x"
@@ -25,5 +26,8 @@
     , "puts": "*"
     , "node-inspector": "*"
     , "ejs": "*"
+  }, "engines": {
+    "node": "~0.10.x",
+    "npm": "1.2.x"
   }
 }
