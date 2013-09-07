@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+
+  .container.section
+
+    .container
+      p
+      label(for='amount') Time range:
+      input#amount(type='text', style='width: 300px; border: 0; color: #6DC5FB; font-weight: bold;')
+      #slider-range
+
+  .container.section
+    #map-canvas(style='height:500px;max-width:none;')
+
+  span#status Started
+
+  div#log
