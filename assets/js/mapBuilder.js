@@ -135,8 +135,10 @@ function stopAnimation() {
 function resetAnimation() {
     console.log("reset");
     tmin = 1378011600000;
-    tmax = 1378011600000 + (3600*5*1000);
+    tmax = 1378011600000 + (3600*20*1000);
     $('#slider-range').slider('values', [tmin, tmax]);
+    window.removeBerths();
+    window.heat_data.clear();
 }
 
 function nextHour() {
