@@ -12,8 +12,8 @@ block content
       .col-md-6
         .btn-group.btn-group-justified
           a.btn.btn-default(type='button', onclick='toggleHeatmap()') Congestion
-          a.btn.btn-default(type='button', onclick='changeRadius()') Berths
-          a.btn.btn-default(type='button', onclick='changeOpacity()') Opacity
+          a.btn.btn-default#berths(type='button', data-enabled='0') Berths
+          a.btn.btn-default#ships(type='button', data-enabled='0') Traffic
     .container
       p
       label(for='amount') Time range:
@@ -25,8 +25,7 @@ block content
     #map-canvas(style='height:400px;max-width:none;')
 
 
-
-  span#status Started
+  h2#berth_title
 
   .container.section
     div#mytimeline

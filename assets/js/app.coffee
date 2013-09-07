@@ -14,17 +14,18 @@ window.getVesselPosisitions = () ->
 
   window.berthMovements = {}
   window.berths = {}
+  window.positions = []
 
   $.getJSON vesselUrl + 'vesselpositions', (data, textStatus, jqXHR) ->
 
-    status.text 'Vessel positions received'
     i = 0
     for position in data
 
-      # if i > 50
-        # break
-
       i = i + 1
+
+      pos = CoordinateConversion.rd2Wgs position.position['x'], position.position['y']
+
+      window.positions.push pos
 
       $.getJSON vesselUrl + 'vesselvisits/' + position.vesselId, (data, textStatus, jqXHR) ->
 
@@ -42,6 +43,7 @@ window.getVesselPosisitions = () ->
             weight = window.movementImpact data[0]['vessel']
 
             berth = movement['berthVisitArrival']['berth']
+            berth['movement'] = true
             window.berths[berth['id']] ?= berth
 
             window.berthMovements[etaBerth] ?= []
@@ -62,6 +64,7 @@ window.getVesselPosisitions = () ->
             weight = window.movementImpact data[0]['vessel']
 
             berth = movement['berthVisitDeparture']['berth']
+            berth['movement'] = true
             window.berths[berth['id']] ?= berth
 
             window.berthMovements[etdBerth] ?= []
@@ -74,6 +77,8 @@ window.getVesselPosisitions = () ->
                 id: berth['id'],
                 x: berth['x'],
                 y: berth['y']
+
+
 
 
 window.getMovements = (from, till) ->
@@ -104,41 +109,58 @@ window.getMovementsForBerth = (from, till, berth) ->
 
 
 window.plotBerths = () ->
-  console.log 'test'
 
+  window.markers ?= []
   for berth_id in Object.keys(window.berths)
 
     berth = window.berths[berth_id]
-    console.log berth
+
     position = CoordinateConversion.rd2Wgs(berth.x, berth.y)
     pos = new google.maps.LatLng position['latitude'], position['longitude']
+
+    icon = 'img/pin_gray.png'
+
+    if berth['movement']?
+      icon = 'img/pin.png'
 
     marker = new google.maps.Marker
       position: pos,
       map: window.google_map,
-      title: berth_id
+      title: berth_id #,
+      icon: icon
 
+    window.markers.push marker
     google.maps.event.addListener marker, 'click', () ->
-      console.log 'Clicked marker', marker.title
+      # console.log 'Clicked marker', marker.title
+      console.log 'Click op', parseInt(this.title)
+      window.drawTimeLineForBerth parseInt(this.title)
 
+window.removeBerths = () ->
+  for marker in window.markers
+    marker.setMap null
+  window.markers = []
 
 window.drawTimeLineForBerth = (berth) ->
-  from = $('#slider-range').slider 'values', 0
-  till = $('#slider-range').slider 'values', 1
+
+  berth_object = window.berths[berth]
+
+  $('#berth_title').text berth_object['id'] + ': ' + berth_object['berthName']
+
+  from_range = $('#slider-range').slider 'values', 0
+  till_range = $('#slider-range').slider 'values', 1
+
+  from = 0
+  till = Infinity
   events = window.getMovementsForBerth from, till, berth
 
   data = []
 
   for berthEvent, index in events
 
-    console.log berthEvent['eta']
-
     eta = berthEvent['eta']
     etd = berthEvent['etd']
 
     type = berthEvent['type']
-
-    console.log eta, etd, type
 
     if etd?
       data.push
@@ -159,8 +181,31 @@ window.drawTimeLineForBerth = (berth) ->
     # max: till,
     style: 'box'
 
-  console.log data, options
+  # console.log data
   window.timeline.draw data, options
+  window.timeline.setVisibleChartRange( new Date(from_range), new Date(till_range) )
+
+
+
+$('#berths').on 'click', () ->
+  if $(this).data('enabled') is 0
+    window.plotBerths()
+    $(this).data 'enabled', 1
+  else
+    window.removeBerths()
+    $(this).data 'enabled', 0
+
+$('#ships').on 'click', () ->
+  if $(this).data('enabled') is 0
+    for position in window.positions
+      window.heat_data.push
+        location: new google.maps.LatLng position['latitude'], position['longitude']
+        weight: 100
+      $(this).data 'enabled', 1
+  else
+    window.heat_data.clear()
+    $.event.trigger('timerange_change', [$('#slider-range').slider('values', 0), $('#slider-range').slider('values', 1)])
+    $(this).data 'enabled', 0
 
 
 
