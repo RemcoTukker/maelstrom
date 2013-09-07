@@ -52,6 +52,7 @@ window.getVesselPosisitions = () ->
               etd: etdBerth,
               weight: weight,
               type: 'arrival',
+              shipName: data[0]['shipNameDuringVisit'],
               berth:
                 id: berth['id'],
                 x: berth['x'],
@@ -73,6 +74,7 @@ window.getVesselPosisitions = () ->
               etd: etdBerth,
               weight: weight,
               type: 'departure',
+              shipName: data[0]['shipNameDuringVisit'],
               berth:
                 id: berth['id'],
                 x: berth['x'],
@@ -167,6 +169,8 @@ window.drawTimeLineForBerth = (berth) ->
 
     if type is 'departure'
       continue
+
+    type = type + ': ' + berthEvent['shipName']
 
     if etd?
       data.push
