@@ -16,7 +16,7 @@ class ProxyApp
         [response.code, response.to_hash, [response.body]]
       end
     rescue Errno::ECONNREFUSED
-      [500, {}, ["Server is down, try $ npm start"]]
+      [500, {}, ["Server is down, try `$ npm start`, `$ cake dev` or an other method to start the application."]]
     end
   end
 end
