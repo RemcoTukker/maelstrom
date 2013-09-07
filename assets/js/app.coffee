@@ -165,6 +165,9 @@ window.drawTimeLineForBerth = (berth) ->
 
     type = berthEvent['type']
 
+    if type is 'departure'
+      continue
+
     if etd?
       data.push
         start: eta,
