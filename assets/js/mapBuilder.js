@@ -159,11 +159,11 @@ $(function() {
   $( "#slider-range" ).slider({
     range: true,
     // min: Math.round(new Date().getTime() / 1) - (3600 * 24),
-    min: 1342699200000,
+    min: 1367496679000,
     // max: Math.round(new Date().getTime() / 1)+(60*60*48) - (3600 * 24),
-    max: 1379651003000,
+    max: 1378113078000,
     // values: [Math.round(new Date().getTime() / 1) - (3600 * 24), Math.round(new Date().getTime() / 1)+(60*60*2) - (3600*24)],
-    values: [1342699200000, 1342699200000 + (3600*48*1000)],
+    values: [1367496679000, 1367496679000 + (3600*48*1000)],
     slide: function( event, ui ) {
       $( "#amount" ).val(ui.values[ 0 ] + " - " + ui.values[ 1 ]);
     },

@@ -10,6 +10,8 @@ head
 
   // CSS
   != css('app')
+  != css('timeline')
+  != css('bootstrap-overrides')
   != css('//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css')
 
   link(rel='stylesheet', href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css')
@@ -21,6 +23,8 @@ head
   <![endif]-->
 
   script(src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB5nthPXyifY8ucsy6q93pQqjXUQTEvb4Q&sensor=false&libraries=visualization")
+  script(src="http://www.google.com/jsapi")
+  != js('timeline')
 
 body(onload='initialize()')
 

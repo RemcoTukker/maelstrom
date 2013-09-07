@@ -122,8 +122,53 @@ window.plotBerths = () ->
       console.log 'Clicked marker', marker.title
 
 
+window.drawTimeLineForBerth = (berth) ->
+  from = $('#slider-range').slider 'values', 0
+  till = $('#slider-range').slider 'values', 1
+  events = window.getMovementsForBerth from, till, berth
+
+  data = []
+
+  for berthEvent, index in events
+
+    console.log berthEvent['eta']
+
+    eta = berthEvent['eta']
+    etd = berthEvent['etd']
+
+    type = berthEvent['type']
+
+    console.log eta, etd, type
+
+    if etd?
+      data.push
+        start: eta,
+        end: etd,
+        content: type
+    else
+      data.push
+        start: eta,
+        content: type
+
+
+  window.timeline = new links.Timeline($('#mytimeline')[0])
+  options =
+    width: '100%',
+    height: '300px',
+    # min: from,
+    # max: till,
+    style: 'box'
+
+  console.log data, options
+  window.timeline.draw data, options
+
+
+
 
 jQuery ->
+
+  # google.load "visualization", "1"
+
   window.getVesselPosisitions()
 
   $(document).bind 'timerange_change', (e, from, till) ->
