@@ -110,7 +110,7 @@ window.getMovementsForBerth = (from, till, berth) ->
 
 window.plotBerths = () ->
 
-  window.markers ?= []
+  window.markers ?= {}
   for berth_id in Object.keys(window.berths)
 
     berth = window.berths[berth_id]
@@ -129,22 +129,25 @@ window.plotBerths = () ->
       title: berth_id #,
       icon: icon
 
-    window.markers.push marker
+    window.markers[berth_id] = marker
     google.maps.event.addListener marker, 'click', () ->
       # console.log 'Clicked marker', marker.title
       console.log 'Click op', parseInt(this.title)
       window.drawTimeLineForBerth parseInt(this.title)
 
+  $.event.trigger('timerange_change', [$('#slider-range').slider('values', 0), $('#slider-range').slider('values', 1)])
+
+
 window.removeBerths = () ->
-  for marker in window.markers
-    marker.setMap null
-  window.markers = []
+  for id in Object.keys(window.markers)
+    window.markers[id].setMap null
+  window.markers = {}
 
 window.drawTimeLineForBerth = (berth) ->
 
   berth_object = window.berths[berth]
 
-  $('#berth_title').text berth_object['id'] + ': ' + berth_object['berthName']
+  $('#berth_title').text 'Timeline for berth ' + berth_object['id'] + ': ' + berth_object['berthName']
 
   from_range = $('#slider-range').slider 'values', 0
   till_range = $('#slider-range').slider 'values', 1
@@ -220,8 +223,21 @@ jQuery ->
 
     movements = window.getMovements from, till
 
+    if window.markers?
+      for id in Object.keys(window.markers)
+        marker = window.markers[id]
+        marker.setIcon 'img/pin_gray.png'
+        marker.setZIndex 1
+
     for movement in movements
       window.heat_data.push
         location: new google.maps.LatLng(movement['coordinate']['latitude'], movement['coordinate']['longitude']),
         weight: movement['weight']
         # weight: 1
+
+      if window.markers?
+        if window.markers[ movement['berth']['id']]?
+         window.markers[ movement['berth']['id']].setIcon 'img/pin.png'
+         marker.setZIndex Infinity
+
+

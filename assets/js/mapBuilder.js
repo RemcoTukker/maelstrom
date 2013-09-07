@@ -92,7 +92,7 @@ function initialize() {
   window.google_map = map;
 
   google.maps.event.addListener(window.google_map, 'zoom_changed', function() {
-    changeRadius(40 + ((window.google_map.getZoom() - 11) * 10));
+    changeRadius(40 * Math.pow(1.5,(window.google_map.getZoom() - 11) ));
   });
 
   heatmap = new google.maps.visualization.HeatmapLayer({
@@ -113,7 +113,7 @@ function toggleHeatmap() {
 }
 
 function changeRadius(radius) {
-  heatmap.setOptions(radius);
+  heatmap.setOptions({radius: radius});
 }
 
 function changeOpacity() {
@@ -209,7 +209,7 @@ $(function() {
     // max: Math.round(new Date().getTime() / 1)+(60*60*48) - (3600 * 24),
     max: 1378566904000,
     // values: [Math.round(new Date().getTime() / 1) - (3600 * 24), Math.round(new Date().getTime() / 1)+(60*60*2) - (3600*24)],
-    values: [1378011600000, 1378011600000 + (3600*5*1000)],
+    values: [1378011600000, 1378011600000 + (3600*20*1000)],
     slide: function( event, ui ) {
       $( "#amount" ).val(printDate(new Date(ui.values[0])) + "   -   " + printDate(new Date(ui.values[1])));
     },
