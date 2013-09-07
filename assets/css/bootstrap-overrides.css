@@ -2,6 +2,10 @@ body {
 /*padding: 30px;*/
 }
 
+.navbar-inverse .navbar-brand {
+  color: white !important;
+}
+
 .navbar {
 margin-bottom: 30px;
 }
