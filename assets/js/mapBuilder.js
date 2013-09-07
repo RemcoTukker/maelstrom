@@ -91,11 +91,15 @@ function initialize() {
 
   window.google_map = map;
 
+  google.maps.event.addListener(window.google_map, 'zoom_changed', function() {
+    changeRadius(40 + ((window.google_map.getZoom() - 11) * 10));
+  });
+
   heatmap = new google.maps.visualization.HeatmapLayer({
     map: map,
     data: window.heat_data,
-    radius: 30,
-    maxIntensity: 10000
+    radius: 40
+    // maxIntensity: 1000
   });
 
   google.maps.event.addListener(map, 'tilesloaded', function() {
@@ -108,8 +112,8 @@ function toggleHeatmap() {
   heatmap.setMap(heatmap.getMap() ? null : map);
 }
 
-function changeRadius() {
-  heatmap.setOptions({radius: heatmap.get('radius') ? null : 40});
+function changeRadius(radius) {
+  heatmap.setOptions(radius);
 }
 
 function changeOpacity() {
@@ -120,7 +124,7 @@ function changeOpacity() {
 function startAnimation() {
   if (unlock && ! running) {
     running = true;
-    mapAnimate();
+    animateMap();
   }
 }
 
@@ -130,13 +134,38 @@ function stopAnimation() {
 
 function resetAnimation() {
     console.log("reset");
+    tmin = 1378011600000;
+    tmax = 1378011600000 + (3600*5*1000);
+    $('#slider-range').slider('values', [tmin, tmax]);
 }
 
-// function mapAnimate() {
-//   if (!running) {
-//     return;
-//   }
-//   time =
+function nextHour() {
+  if (! running) {
+    return;
+  }
+  if (tmax > simTime) {
+    running = false;
+    return;
+  }
+  else {
+    tmin = tmin + (60*60*1000);
+    tmax = tmax + (60*60*1000);
+    $( "#slider-range" ).slider({
+      values: [tmin, tmax]
+    })
+    setTimeout(nextHour, 100);
+  }
+}
+
+function animateMap() {
+  console.log("starting animation");
+  tmin = $( "#slider-range" ).slider( "values", 0 );
+  tmax = $( "#slider-range" ).slider( "values", 1 );
+
+  simTime = new Date().getTime() + (60*60*48*1000);
+
+  nextHour();
+}
 
 
 function updateDataset(tmin,tmax) {
@@ -155,22 +184,40 @@ function updateDataset(tmin,tmax) {
   // }
 }
 
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
+function printDate(d) {
+  var curr_date = pad(d.getDate(),2);
+  var curr_month = pad(d.getMonth()+1,2);
+  var curr_year = d.getFullYear();
+  var curr_hour = pad(d.getHours(), 2);
+  var curr_min  = pad(d.getMinutes(), 2);
+
+  var datestring = "" + curr_date + "-" + curr_month + "-" + curr_year + " " + curr_hour + ":" + curr_min;
+  return datestring
+}
+
 $(function() {
   $( "#slider-range" ).slider({
     range: true,
     // min: Math.round(new Date().getTime() / 1) - (3600 * 24),
-    min: 1367496679000,
+    min: 1378011600000,
     // max: Math.round(new Date().getTime() / 1)+(60*60*48) - (3600 * 24),
-    max: 1378113078000,
+    max: 1378566904000,
     // values: [Math.round(new Date().getTime() / 1) - (3600 * 24), Math.round(new Date().getTime() / 1)+(60*60*2) - (3600*24)],
-    values: [1367496679000, 1367496679000 + (3600*48*1000)],
+    values: [1378011600000, 1378011600000 + (3600*5*1000)],
     slide: function( event, ui ) {
-      $( "#amount" ).val(ui.values[ 0 ] + " - " + ui.values[ 1 ]);
+      $( "#amount" ).val(printDate(new Date(ui.values[0])) + "   -   " + printDate(new Date(ui.values[1])));
     },
-    change: function( event, ui ) {
-      console.log("change");
+    change: function (event, ui ) {
       updateDataset(ui.values[0],ui.values[1]);
+      printDate(new Date(ui.values[0]));
+      $( "#amount" ).val(printDate(new Date(ui.values[0])) + "   -   " + printDate(new Date(ui.values[1])));
     }
   });
-  $( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) + " - " + $( "#slider-range" ).slider( "values", 1 ));
+  $( "#amount" ).val(printDate(new Date($( "#slider-range" ).slider( "values", 0 ))) + "  -  " + printDate(new Date($( "#slider-range" ).slider( "values", 1 ))));
 });

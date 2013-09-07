@@ -1,17 +1,28 @@
 extends ../layout
 
 block content
-
   .container.section
+    .row
+      .col-md-6
+        .btn-group.btn-group-justified
+          a.btn.btn-default(type='button', onclick='startAnimation()') Start
+          a.btn.btn-default(type='button', onclick='stopAnimation()') Stop
+          a.btn.btn-default(type='button', onclick='resetAnimation()') Reset
 
+      .col-md-6
+        .btn-group.btn-group-justified
+          a.btn.btn-default(type='button', onclick='toggleHeatmap()') Congestion
+          a.btn.btn-default(type='button', onclick='changeRadius()') Berths
+          a.btn.btn-default(type='button', onclick='changeOpacity()') Opacity
     .container
       p
       label(for='amount') Time range:
-      input#amount(type='text', style='width: 300px; border: 0; color: #6DC5FB; font-weight: bold;')
+
+      input#amount(type='text', style='width: 800px; border: 0; color: #6DC5FB; font-weight: bold;')
       #slider-range
 
   .container.section
-    #map-canvas(style='height:500px;max-width:none;')
+    #map-canvas(style='height:400px;max-width:none;')
 
 
 
