@@ -1,4 +1,6 @@
-# Haven app
+# Maelstrom
+
+[Visit application online](http://maelstrom-app.herokuapp.com)
 
 ## Install
 Install all npm packages: `npm install`.
