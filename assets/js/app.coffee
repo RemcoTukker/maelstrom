@@ -1,4 +1,5 @@
-window.vesselUrl = 'http://141.176.110.144:8180/json/hackaton/';
+# window.vesselUrl = 'http://141.176.110.144:8180/json/hackaton/';
+window.vesselUrl = '/haven_data/'
 
 status = $('#status')
 log = $('#log')
