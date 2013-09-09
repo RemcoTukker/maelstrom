@@ -35,10 +35,12 @@ body(onload='initialize()')
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand.active Maelstrom | Congestion Risk Predictor &copy; 2013
+        a.navbar-brand.active
+          img(src='img/maelstrom_favicon_white.png' height='30px')
+          | &nbsp; Maelstrom | Congestion Risk Predictor &copy; 2013
       .collapse.navbar-collapse
         ul.nav.navbar-nav
-          //- li.active: a(href="#about") About
+          li.active: a(href="about") About
 
   .container
     block content
