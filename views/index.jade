@@ -1,7 +1,31 @@
 extends layout
 
 block content
+  .container.section
+    .row
+      .col-md-6
+        .btn-group.btn-group-justified
+          a.btn.btn-default(type='button', onclick='startAnimation()') Start
+          a.btn.btn-default(type='button', onclick='stopAnimation()') Stop
+          a.btn.btn-default(type='button', onclick='resetAnimation()') Reset
 
-  h1 Placeholder Haven app
+      .col-md-6
+        .btn-group.btn-group-justified
+          a.btn.btn-default(type='button', onclick='toggleHeatmap()') Congestion
+          a.btn.btn-default#berths(type='button', data-enabled='0') Berths
+          a.btn.btn-default#ships(type='button', data-enabled='0') Traffic
+    .container
+      p
+      label(for='amount') Time range:
 
-  p Hier komt wat meer tekst.
+      input#amount(type='text', style='width: 800px; border: 0; color: #6DC5FB; font-weight: bold;')
+      #slider-range
+
+  .container.section
+    #map-canvas(style='height:400px;max-width:none;')
+
+
+  h2#berth_title
+
+  .container.section
+    div#mytimeline

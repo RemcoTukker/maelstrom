@@ -46,7 +46,7 @@ body(onload='initialize()')
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand.active
+        a.navbar-brand.active(href="/")
           img(src='img/maelstrom_favicon_white.png' height='30px')
           | &nbsp; Maelstrom | Congestion Risk Predictor &copy; 2013
       .collapse.navbar-collapse
@@ -55,9 +55,6 @@ body(onload='initialize()')
 
   .container
     block content
-
-  //- #footer Team `Maelstrom` from Almende B.V.
-
 
   != js('//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js')
   != js('//code.jquery.com/ui/1.10.3/jquery-ui.js')
