@@ -1,9 +1,9 @@
-# window.vesselUrl = 'http://141.176.110.144:8180/json/hackaton/';
 window.vesselUrl = '/haven_data/'
 
 status = $('#status')
 log = $('#log')
 
+# Calculate the impact for the heatmap of a movement for a specific vessel
 window.movementImpact = (vessel) ->
   factors =
     length: 1.5
@@ -11,6 +11,7 @@ window.movementImpact = (vessel) ->
 
   vessel['length'] * factors['length'] + vessel['grossTonnage'] * factors['grossTonnage']
 
+# Aggregate all information
 window.getVesselPosisitions = () ->
 
   window.berthMovements = {}
@@ -19,10 +20,7 @@ window.getVesselPosisitions = () ->
 
   $.getJSON vesselUrl + 'vesselpositions', (data, textStatus, jqXHR) ->
 
-    i = 0
     for position in data
-
-      i = i + 1
 
       pos = CoordinateConversion.rd2Wgs position.position['x'], position.position['y']
 
@@ -81,9 +79,7 @@ window.getVesselPosisitions = () ->
                 x: berth['x'],
                 y: berth['y']
 
-
-
-
+# Get all the movements within a specific time range
 window.getMovements = (from, till) ->
 
   keys = Object.keys(window.berthMovements)
@@ -103,6 +99,7 @@ window.getMovements = (from, till) ->
 
   return events
 
+# Get all the movements within a specific time range for a specific berth
 window.getMovementsForBerth = (from, till, berth) ->
 
   movements = getMovements from, till
@@ -110,7 +107,7 @@ window.getMovementsForBerth = (from, till, berth) ->
   movements.filter (movement) ->
     movement.berth.id == berth
 
-
+# Plot all the berths on the map
 window.plotBerths = () ->
 
   window.markers ?= {}
@@ -123,6 +120,7 @@ window.plotBerths = () ->
 
     icon = 'img/pin_gray.png'
 
+    # Use the red pin when there is movement in the current time range for this berth
     if berth['movement']?
       icon = 'img/pin.png'
 
@@ -133,19 +131,19 @@ window.plotBerths = () ->
       icon: icon
 
     window.markers[berth_id] = marker
+
     google.maps.event.addListener marker, 'click', () ->
-      # console.log 'Clicked marker', marker.title
-      console.log 'Click op', parseInt(this.title)
       window.drawTimeLineForBerth parseInt(this.title)
 
   $.event.trigger('timerange_change', [$('#slider-range').slider('values', 0), $('#slider-range').slider('values', 1)])
 
-
+# Remove all the berths from the map
 window.removeBerths = () ->
   for id in Object.keys(window.markers)
     window.markers[id].setMap null
   window.markers = {}
 
+# Draw all the events on the timeline for a specific berth
 window.drawTimeLineForBerth = (berth) ->
 
   berth_object = window.berths[berth]
@@ -188,16 +186,13 @@ window.drawTimeLineForBerth = (berth) ->
   options =
     width: '100%',
     height: '300px',
-    # min: from,
-    # max: till,
     style: 'box'
 
-  # console.log data
   window.timeline.draw data, options
   window.timeline.setVisibleChartRange( new Date(from_range), new Date(till_range) )
 
 
-
+# Toggle the drawing of berths
 $('#berths').on 'click', () ->
   if $(this).data('enabled') is 0
     window.plotBerths()
@@ -206,6 +201,7 @@ $('#berths').on 'click', () ->
     window.removeBerths()
     $(this).data 'enabled', 0
 
+# Toggle the drawing of the heatmap
 $('#ships').on 'click', () ->
   if $(this).data('enabled') is 0
     for position in window.positions
@@ -220,13 +216,13 @@ $('#ships').on 'click', () ->
 
 
 
-
+# Onload:
 jQuery ->
 
-  # google.load "visualization", "1"
-
+  # Fetch all vessel information and process it (note: this should have a callback mechanism)
   window.getVesselPosisitions()
 
+  # Redraw when slider changes
   $(document).bind 'timerange_change', (e, from, till) ->
 
     movements = window.getMovements from, till
@@ -241,11 +237,8 @@ jQuery ->
       window.heat_data.push
         location: new google.maps.LatLng(movement['coordinate']['latitude'], movement['coordinate']['longitude']),
         weight: movement['weight']
-        # weight: 1
 
       if window.markers?
         if window.markers[ movement['berth']['id']]?
          window.markers[ movement['berth']['id']].setIcon 'img/pin.png'
          marker.setZIndex Infinity
-
-
