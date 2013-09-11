@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'json'
-require 'pp'
 
 # This script reads all the current port information JSON files, filters it from
 # sensitive information and stores the new JSON files.
@@ -20,7 +19,7 @@ vessel_positions.map! do |position|
 end
 
 # Write out new data file
-File.open base_dir + '/vesselpositions_filtered', 'w+' do |file|
+File.open base_dir + '/vesselpositions', 'w+' do |file|
   file.write vessel_positions.to_json
 end
 
@@ -28,6 +27,8 @@ end
 
 Dir.foreach visits_dir do |visit_file|
   next if visit_file == '.' or visit_file == '..'
+
+  p "Reading #{visit_file}"
 
   file_content = File.read(visits_dir + '/' + visit_file)
   file = JSON.parse file_content
@@ -48,7 +49,7 @@ Dir.foreach visits_dir do |visit_file|
   end
 
   # Write new file
-  File.open visits_dir + '/' + visit_file + '_filtered', 'w+' do |new_file|
+  File.open visits_dir + '/' + visit_file, 'w+' do |new_file|
     new_file.write file.to_json
   end
 
