@@ -35,7 +35,7 @@ window.getVesselPosisitions = () ->
         movements = data[0]['movements']
 
         for movement in movements
-
+          #TODO: tidy up this loop!
           if movement['berthVisitArrival']
             etaBerth = movement['berthVisitArrival']['etaBerth']
             etdBerth = movement['berthVisitArrival']['etdBerth']
@@ -43,6 +43,8 @@ window.getVesselPosisitions = () ->
 
             berth = movement['berthVisitArrival']['berth']
             berth['movement'] = true
+            berth['pos'] = CoordinateConversion.rd2Wgs berth['x'], berth['y']
+            berth['latlong'] = new google.maps.LatLng berth.pos['latitude'], berth.pos['longitude']
             window.berths[berth['id']] ?= berth
 
             window.berthMovements[etaBerth] ?= []
@@ -65,6 +67,8 @@ window.getVesselPosisitions = () ->
 
             berth = movement['berthVisitDeparture']['berth']
             berth['movement'] = true
+            berth['pos'] = CoordinateConversion.rd2Wgs berth['x'], berth['y']
+            berth['latlong'] = new google.maps.LatLng berth.pos['latitude'], berth.pos['longitude']
             window.berths[berth['id']] ?= berth
 
             window.berthMovements[etdBerth] ?= []
@@ -115,9 +119,6 @@ window.plotBerths = () ->
 
     berth = window.berths[berth_id]
 
-    position = CoordinateConversion.rd2Wgs(berth.x, berth.y)
-    pos = new google.maps.LatLng position['latitude'], position['longitude']
-
     icon = 'img/pin_gray.png'
 
     # Use the red pin when there is movement in the current time range for this berth
@@ -125,7 +126,7 @@ window.plotBerths = () ->
       icon = 'img/pin.png'
 
     marker = new google.maps.Marker
-      position: pos,
+      position: berth.latlong,
       map: window.google_map,
       title: berth_id #,
       icon: icon
@@ -148,6 +149,9 @@ window.drawTimeLineForBerth = (berth) ->
 
   berth_object = window.berths[berth]
 
+  #find nearby berths based on distance, in this case 500 meter
+  nearby_berths = (other_berth for berth_id, other_berth of window.berths when google.maps.geometry.spherical.computeDistanceBetween(other_berth.latlong, berth_object.latlong) < 500)
+
   $('#berth_title').text 'Timeline for berth ' + berth_object['id'] + ': ' + berth_object['berthName']
 
   from_range = $('#slider-range').slider 'values', 0
@@ -156,6 +160,13 @@ window.drawTimeLineForBerth = (berth) ->
   from = 0
   till = Infinity
   events = window.getMovementsForBerth from, till, berth
+  
+  #get the events from the nearby berths, but not from the current berth 
+  #TODO: change this, no need to retreive events seperately, only to add them differently to the timeline
+  nearby_events = (window.getMovementsForBerth from, till, otherberth.id for otherberth in nearby_berths when otherberth.id isnt berth)
+
+  #add the events per berth to the events array
+  events = events.concat nearby_berth_events for nearby_berth_events in nearby_events
 
   data = []
 
