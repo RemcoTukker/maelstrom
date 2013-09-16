@@ -177,21 +177,38 @@ window.drawTimeLineForBerth = (berth) ->
 
     type = berthEvent['type']
 
+    #todo: fix this properly, keep eta's and etd's associated somewhere!
     if type is 'departure'
       continue
 
     type = type + ': ' + berthEvent['shipName']
 
-    if etd?
-      data.push
-        start: eta,
-        end: etd,
-        content: type
-    else
-      data.push
-        start: eta,
-        content: type
+    console.log berthEvent.berth.id == berth
 
+    if etd?
+      if berthEvent.berth.id == berth
+        data.push
+          start: eta,
+          end: etd,
+          content: type,
+          className: "ourtraject"
+      else
+        data.push
+          start: eta,
+          end: etd,
+          content: type,
+          className: 'othertraject'
+    else
+      if berthEvent.berth.id == berth
+        data.push
+          start: eta,
+          content: type,
+          className: 'ourarrival'
+      else
+        data.push
+          start: eta,
+          content: type,
+          className: 'otherarrival'
 
   window.timeline = new links.Timeline($('#mytimeline')[0])
   options =

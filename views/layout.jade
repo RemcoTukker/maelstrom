@@ -11,6 +11,15 @@ head
   // CSS
   != css('app')
   != css('timeline')
+  
+  style(type='text/css')
+    #mytimeline div.ourdeparture {background-color: red; border-color: darkred; color: white; background-image: none;}
+    #mytimeline div.ourarrival {background-color: greenyellow; border-color: green; background-image: none;}
+    #mytimeline div.ourtraject {background-color: gold; border-color: orange; background-image: none;}
+    #mytimeline div.otherarrival {background-color: darkgray; border-color: white; background-image: none;}
+    #mytimeline div.otherdeparture {background-color: darkgray; border-color: white; background-image: none;}
+    #mytimeline div.othertraject {background-color: darkgray; border-color: white; background-image: none;}
+
   != css('bootstrap-overrides')
   != css('//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css')
 
