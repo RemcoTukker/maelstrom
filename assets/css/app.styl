@@ -4,3 +4,24 @@ body
 
 label
   margin-right: 10px
+
+timeline-colors(background, border, text)
+  background-color background
+  border-color border
+  color text
+  background-image none
+
+#mytimeline
+  div.ourdeparture
+    timeline-colors red darkred white
+  div.ourarrival
+    timeline-colors greenyellow green black
+  div.ourtraject
+    timeline-colors gold orange black
+  div.otherarrival
+    timeline-colors darkgray white black
+  div.otherdeparture
+    timeline-colors darkgray white black
+  div.othertraject
+    timeline-colors darkgray white black
+
